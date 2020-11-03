@@ -15,6 +15,8 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     private YouTubePlayerView youTubePlayerView;
     private static final String GOOGLE_API_KEY = "AIzaSyBf7K-Eqt1QYt1VXQCgaM0xUYST0dk_Qas";
 
+    private YouTubePlayer.PlaybackEventListener playbackEventListener;
+
 
 
     @Override
@@ -22,9 +24,37 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        youTubePlayerView = findViewById(R.id.viewYoutubePlayer);
+        playbackEventListener = new YouTubePlayer.PlaybackEventListener() {
+            @Override
+            public void onPlaying() {
+                Toast.makeText(MainActivity.this, "Play", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onPaused() {
+                Toast.makeText(MainActivity.this, "Pause", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStopped() {
+                Toast.makeText(MainActivity.this, "Stop", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onBuffering(boolean b) {
+                Toast.makeText(MainActivity.this, "video pre carregando", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSeekTo(int i) {
+                Toast.makeText(MainActivity.this, "Seek: " + i, Toast.LENGTH_SHORT).show();
+
+            }
+        };
+        youTubePlayerView = findViewById(R.id.viewYoutubePlayer);
         youTubePlayerView.initialize(GOOGLE_API_KEY, this);
+
 
     }
 
@@ -32,15 +62,12 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean foiRestaurado) {
-
-
-
-
-
         if(!foiRestaurado)
         {
             //Carregar apenas a miniatura
             youTubePlayer.cueVideo("SNl6bn-K1LU");
+            youTubePlayer.cuePlaylist("PL4o29bINVT4EG_y-k5jGoOu3-Am8Nvi10");
+            youTubePlayer.setPlaybackEventListener(playbackEventListener );
         }
         else
         {
@@ -48,12 +75,11 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             //youTubePlayer.loadVideo("SNl6bn-K1LU");
         }
 
-
         Toast.makeText(this, "Player iniciado com sucesso", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-        Toast.makeText(this, "Erro ao iniciar o Player", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Erro ao iniciar o Player: " + youTubeInitializationResult.toString(), Toast.LENGTH_SHORT).show();
     }
 }
