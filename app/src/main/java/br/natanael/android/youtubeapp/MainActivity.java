@@ -16,6 +16,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     private static final String GOOGLE_API_KEY = "AIzaSyBf7K-Eqt1QYt1VXQCgaM0xUYST0dk_Qas";
 
     private YouTubePlayer.PlaybackEventListener playbackEventListener;
+    private YouTubePlayer.PlayerStateChangeListener playerStateChangeListener;
 
 
 
@@ -23,6 +24,40 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        playerStateChangeListener = new YouTubePlayer.PlayerStateChangeListener() {
+            @Override
+            public void onLoading() {
+                Toast.makeText(MainActivity.this, "Video carregando", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLoaded(String s) {
+                Toast.makeText(MainActivity.this, "Video carregado", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onAdStarted() {
+                Toast.makeText(MainActivity.this, "Propaganda inicicou", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onVideoStarted() {
+                Toast.makeText(MainActivity.this, "Video comecando", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onVideoEnded() {
+                Toast.makeText(MainActivity.this, "Video chegou ao final", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onError(YouTubePlayer.ErrorReason errorReason) {
+                Toast.makeText(MainActivity.this, "Erro: " + errorReason.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
 
         playbackEventListener = new YouTubePlayer.PlaybackEventListener() {
             @Override
@@ -65,9 +100,10 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         if(!foiRestaurado)
         {
             //Carregar apenas a miniatura
-            youTubePlayer.cueVideo("SNl6bn-K1LU");
+            //youTubePlayer.cueVideo("SNl6bn-K1LU");
             youTubePlayer.cuePlaylist("PL4o29bINVT4EG_y-k5jGoOu3-Am8Nvi10");
-            youTubePlayer.setPlaybackEventListener(playbackEventListener );
+            //youTubePlayer.setPlaybackEventListener(playbackEventListener );
+            youTubePlayer.setPlayerStateChangeListener(playerStateChangeListener);
         }
         else
         {
