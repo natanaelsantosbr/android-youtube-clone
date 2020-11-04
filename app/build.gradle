@@ -29,6 +29,7 @@ dependencies {
 
     //Youtube
     implementation files("libs/YouTubeAndroidPlayerApi.jar")
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
 
 }
