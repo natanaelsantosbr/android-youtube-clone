@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".activity.MainActivity"
     android:orientation="vertical">
 
     <include
@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"></include>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerVideo"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>
