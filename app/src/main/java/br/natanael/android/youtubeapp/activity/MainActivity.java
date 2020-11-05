@@ -10,23 +10,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PropertyResourceBundle;
 
 import br.natanael.android.youtubeapp.R;
 import br.natanael.android.youtubeapp.adapter.AdapterVideo;
 import br.natanael.android.youtubeapp.api.IYoutubeService;
 import br.natanael.android.youtubeapp.helper.RetrofitConfig;
 import br.natanael.android.youtubeapp.helper.YoutubeConfig;
+import br.natanael.android.youtubeapp.model.Item;
 import br.natanael.android.youtubeapp.model.Resultado;
 import br.natanael.android.youtubeapp.model.Video;
 import retrofit2.Call;
@@ -37,7 +32,10 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerVideo;
-    private List<Video> videos = new ArrayList<>();
+
+    private List<Item> videos = new ArrayList<>();
+    private Resultado resultado;
+
     private AdapterVideo adapterVideo;
     private MaterialSearchView searchView;
 
@@ -60,11 +58,9 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Youtube");
         setSupportActionBar(toolbar);
 
+        //Recupera videos
         recuperarVideos();
-        adapterVideo = new AdapterVideo(videos, this);
-        recyclerVideo.setHasFixedSize(true);
-        recyclerVideo.setLayoutManager(new LinearLayoutManager(this));
-        recyclerVideo.setAdapter(adapterVideo);
+
 
         //configura metodos para SearchView
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
@@ -103,7 +99,17 @@ public class MainActivity extends AppCompatActivity {
         ).enqueue(new Callback<Resultado>() {
             @Override
             public void onResponse(Call<Resultado> call, Response<Resultado> response) {
-                Log.d("resultado", "onResponse: resultado" + response.toString());
+                Log.d("resultado", "onResponse: resultado: " + response.toString());
+
+                if(response.isSuccessful())
+                {
+                    Resultado resultado = response.body();
+                    videos = resultado.items;
+
+                    configurarRecyclerView();
+
+                    Log.d("resultado", "onResponse: resultado: " + resultado.items.get(0).id.videoId);
+                }
             }
 
             @Override
@@ -113,6 +119,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void configurarRecyclerView() {
+        adapterVideo = new AdapterVideo(videos, this);
+        recyclerVideo.setHasFixedSize(true);
+        recyclerVideo.setLayoutManager(new LinearLayoutManager(this));
+        recyclerVideo.setAdapter(adapterVideo);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
