@@ -63,14 +63,15 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Recupera videos
-        recuperarVideos();
+        recuperarVideos("");
 
 
         //configura metodos para SearchView
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                recuperarVideos(query);
+                return true;
             }
 
             @Override
@@ -86,12 +87,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSearchViewClosed() {
-
+                recuperarVideos("");
             }
         });
     }
 
-    private void recuperarVideos() {
+    private void recuperarVideos(String pesquisa) {
+        String q = pesquisa.replaceAll(" ", "+");
+        Log.d("resultado", "onResponse: resultado: " + q);
+
         IYoutubeService youtubeService = retrofit.create(IYoutubeService.class);
 
         youtubeService.recuperarVideos(
@@ -99,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
                 "date",
                 "10",
                 "snippet",
-                YoutubeConfig.CHAVE_YOUTUBE_API
+                YoutubeConfig.CHAVE_YOUTUBE_API,
+                q
         ).enqueue(new Callback<Resultado>() {
             @Override
             public void onResponse(Call<Resultado> call, Response<Resultado> response) {
@@ -112,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
                     configurarRecyclerView();
 
-                    Log.d("resultado", "onResponse: resultado: " + resultado.items.get(0).id.videoId);
+                    //Log.d("resultado", "onResponse: resultado: " + resultado.items.get(0).id.videoId);
                 }
             }
 

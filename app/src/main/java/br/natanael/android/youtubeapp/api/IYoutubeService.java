@@ -12,5 +12,6 @@ public interface IYoutubeService {
                                     @Query("order") String order,
                                     @Query("maxResults") String maxResults,
                                     @Query("part") String part,
-                                    @Query("key") String key);
+                                    @Query("key") String key,
+                                    @Query("q") String q);
 }
