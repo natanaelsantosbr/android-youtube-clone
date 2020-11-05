@@ -5,11 +5,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
@@ -21,6 +24,7 @@ import br.natanael.android.youtubeapp.adapter.AdapterVideo;
 import br.natanael.android.youtubeapp.api.IYoutubeService;
 import br.natanael.android.youtubeapp.helper.RetrofitConfig;
 import br.natanael.android.youtubeapp.helper.YoutubeConfig;
+import br.natanael.android.youtubeapp.listener.RecyclerItemClickListener;
 import br.natanael.android.youtubeapp.model.Item;
 import br.natanael.android.youtubeapp.model.Resultado;
 import br.natanael.android.youtubeapp.model.Video;
@@ -124,6 +128,29 @@ public class MainActivity extends AppCompatActivity {
         recyclerVideo.setHasFixedSize(true);
         recyclerVideo.setLayoutManager(new LinearLayoutManager(this));
         recyclerVideo.setAdapter(adapterVideo);
+
+        //Configurar evento de cliques
+        recyclerVideo.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerVideo, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Item video = videos.get(position);
+                String idVideo = video.id.videoId;
+
+                Intent i = new Intent(MainActivity.this, PlayerActivity.class);
+                i.putExtra("idVideo", idVideo);
+                startActivity(i);
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        }));
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,8 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
         Item video = videos.get(position);
 
         holder.titulo.setText(video.snippet.title);
+
+        Picasso.get().load(video.snippet.thumbnails.high.url).into(holder.capa);
     }
 
     @Override
