@@ -26,6 +26,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     //Youtube
     implementation files("libs/YouTubeAndroidPlayerApi.jar")
@@ -33,6 +34,10 @@ dependencies {
     //Material
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
 
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+
+
 
 }
